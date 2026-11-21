@@ -30,23 +30,43 @@ have been implemented.
 - The backend records a per-client Supabase project and deployment model.
 - `bot_profiles.enabled` is a bot enablement switch, not a full subscription
   lifecycle.
-- Existing `knowledge_gaps` reporting does not publish an answer.
+- Client sign-in is email plus password with mandatory TOTP MFA; new accounts
+  stay inert until the provider side activates membership
+  ([panel ADR 0004](https://github.com/Debjoy26/ragbot-admin-panel/blob/main/docs/decisions/0004-password-login.md)).
+- Knowledge-gap review plus approved Markdown answers are implemented in the
+  panel (A4, owner-accepted); answers become retrievable only after backend
+  activation.
+- The provider design is accepted panel-side with activation gating (no
+  active state, no servable script; tenants cannot self-activate) and a
+  client-held grant mechanism for private-content access
+  ([panel ADR 0003](https://github.com/Debjoy26/ragbot-admin-panel/blob/main/docs/decisions/0003-a7-provider-baseline-proposal.md)).
+  The provider API home is decided (isolated server piece of
+  `ragbot-widget`); the widget repo's ADR 0019 remains Proposed.
 - The existing widget embed contract remains authoritative until an approved
   change is made.
 
-## 3. Owner decisions required
+## 3. Owner decisions: settled vs still required
+
+Settled panel-side on 2026-11-21 (see the linked panel ADRs; the widget
+repo's ADR 0019 still records these as Proposed):
+
+| Topic | Settled position |
+|---|---|
+| Provider identity | Dedicated staff domain, TOTP MFA, server-side roles, documented break-glass recovery |
+| Provider control plane | Isolated server piece of `ragbot-widget`; provider-owned registry, never in tenant schema |
+| Cross-client access | Default-deny on private content; client-held grants (scope, purpose, expiry, instant revoke); every access audited both sides |
+| Approved answer | Markdown document via the ordinary document pipeline; human approval required; retrievable only after activation |
+| Client membership | Self-registration allowed; accounts inert until provider-side activation; TOTP stays mandatory |
+| Admin framework | React + strict TypeScript + Vite + React Router; Node 26.13.1; static builds; provider split deployment due at wiring |
+
+Still requiring owner decisions:
 
 | Topic | Decision needed |
 |---|---|
-| Provider identity | Identity provider, MFA policy, roles, staff onboarding/recovery, and session model |
-| Provider control plane | Owning repository/service, registry schema, hosting, secrets, tenant-targeting and delegation model |
-| Cross-client access | Which client data provider staff may see, for what purpose, with what consent and audit |
 | Subscription | Plans, status states, start/end semantics, quotas, grace period, manual actions, billing scope, and audit |
 | Runtime enforcement | Which operations check status, authoritative source, caching/invalidation, and failure policy |
 | Widget identifier | Key/slug format, storage/hashing, bootstrap lookup, host restrictions, rotation, revocation, and unknown-key response |
-| Approved answer | Markdown document versus FAQ entity, author/approval rights, deduplication, citations, audit, retention, and indexing status |
-| Client membership | Invite, activation, role change, removal, and recovery behavior |
-| Admin framework | Frontend framework, package manager, supported Node, build separation, deployment target |
+| Client membership | In-panel invitation flow, role changes, and removal (activation itself is settled) |
 | AWS | Whether to leave Render; EC2 versus ECS/Fargate; isolation; tenant DB location; secrets/monitoring; widget CDN |
 | Operations | Data jurisdiction, privacy notice, retention, backup/restore, RPO/RTO, support access, and launch targets |
 | Commercial model | Per-client service limits, usage caps, provider costs, service tiers, and any future payment integration |

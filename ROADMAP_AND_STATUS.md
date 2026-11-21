@@ -2,17 +2,20 @@
 
 ## 1. Status snapshot
 
-Source documentation status as of 2026-11-20:
+Source documentation status as of 2026-11-21:
 
 - Backend phases P0-P10 are recorded as owner-accepted.
 - T25-d real database race checks and T26 single-command unit/integration
   gates remain open carries. P11 evaluation/security/load work has not
   started.
 - The backend status records local and hosted migration histories at 027.
-- The admin-panel repository is a documentation proposal. No frontend,
+- The admin panel records A0–A4 as owner-accepted and implemented, including
+  password login (ADR 0004). Its provider screens are scaffolded; no
   provider API, provider registry, or admin deployment is claimed.
-- Provider control plane, widget-key lifecycle, subscription enforcement,
-  and admin-approved knowledge publishing remain proposed/open.
+- Provider control plane, widget-key lifecycle, and subscription enforcement
+  remain proposed/open (design accepted panel-side in ADR 0003; the widget
+  repo's ADR 0019 remains Proposed). Admin-approved knowledge publishing
+  (A4) is implemented and owner-accepted.
 - Render remains the API/worker baseline. AWS Docker hosting is undecided.
 
 This snapshot is copied from source documentation, not freshly revalidated.
@@ -49,17 +52,17 @@ Documenting it here does not schedule or authorize implementation.
 
 | Phase | Scope | Recorded state |
 |---|---|---|
-| A0 | Resolve product/security decisions and confirm backend contracts | Pending |
-| A1 | Frontend scaffold and test/build tooling | Not started |
-| A2 | Client Auth, MFA assurance, membership, role states | Not started |
-| A3 | Client dashboard, settings, documents, conversations, usage, members | Not started |
-| A4 | Knowledge-gap review and approved-answer workflow | Not started |
+| A0 | Resolve product/security decisions and confirm backend contracts | Accepted |
+| A1 | Frontend scaffold and test/build tooling | Accepted; implemented |
+| A2 | Client Auth, MFA assurance, membership, role states | Accepted; implemented (password login per ADR 0004) |
+| A3 | Client dashboard, settings, documents, conversations, usage, members | Accepted; implemented |
+| A4 | Knowledge-gap review and approved-answer workflow | Accepted; implemented |
 | A5 | Widget installation and public identifier lifecycle | Not started; key contract open |
 | A6 | Subscription display and enforcement integration | Not started; semantics/enforcement open |
-| A7 | Provider identity, registry, API, audit, client operations | Not started; architecture open |
+| A7 | Provider identity, registry, API, audit, client operations | Design accepted (ADR 0003 + amendments); screens scaffolded; backend not started |
 | A8 | Accessibility, security, release readiness, deployment | Not started |
 
-The admin-panel plan is a proposal, not phase acceptance.
+A0–A4 are owner-accepted; the rest remain proposals or unstarted work.
 
 ## 4. Cross-repository sequencing
 

@@ -27,9 +27,10 @@ Provider staff
 ```
 
 The widget/backend and admin-panel repositories remain separate. Provider
-administration, dedicated widget-key lifecycle, subscription enforcement, and
-the reviewed-answer publishing workflow are product proposals, not claims of
-implemented features.
+backend implementation, dedicated widget-key lifecycle, and subscription
+enforcement remain proposals, not claims of implemented features. The
+reviewed-answer publishing workflow (A4) is implemented in the panel and
+owner-accepted.
 
 ## Documents
 
@@ -58,21 +59,29 @@ implemented features.
   visitor API, worker, tenant database/migrations, shared backend contracts,
   and backend security behavior.
 - [`ragbot-admin-panel`](https://github.com/Debjoy26/ragbot-admin-panel)
-  specifies the client and provider administration experiences and their
-  backend integrations. Its current baseline is documentation-only.
+  implements the client administration experience (A0–A4 accepted) and a
+  provider superadmin scaffold awaiting its backend; it consumes approved
+  backend contracts and owns no tenant migrations.
 
 See [documentation governance](DOCUMENTATION_GOVERNANCE.md) before treating
 this hub as authoritative for an implementation-level contract.
 
 ## Status snapshot
 
-As recorded in the source documentation on 2026-11-20:
+As recorded in the source documentation on 2026-11-21:
 
 - The backend records P0-P10 as owner-accepted. T25-d and T26 single-command
   verification carries remain open; P11 has not started.
 - The backend status records local and hosted migration histories at 027.
-- The admin-panel repository has a proposed documentation baseline, not a
-  frontend, provider API, or provider registry implementation.
+- The admin panel records A0–A4 as owner-accepted and implemented (client
+  login is email plus password with mandatory TOTP; see
+  [ADR 0004](https://github.com/Debjoy26/ragbot-admin-panel/blob/main/docs/decisions/0004-password-login.md)).
+  The provider design is accepted with activation-gating and client-held
+  grant amendments ([ADR 0003](https://github.com/Debjoy26/ragbot-admin-panel/blob/main/docs/decisions/0003-a7-provider-baseline-proposal.md));
+  its screens are scaffolded and the provider backend (API, registry, staff
+  identity) is not started. The API home is decided: isolated server piece
+  of `ragbot-widget`; that repo's ADR 0019 remains Proposed pending owner
+  acceptance.
 - Render remains the documented API/worker baseline. AWS Docker hosting is an
   open architecture decision; the widget is a static browser bundle.
 
