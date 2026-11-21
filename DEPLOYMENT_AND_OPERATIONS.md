@@ -24,6 +24,28 @@ Per client, the documented topology is:
 | Client admin panel | Settings, documents, conversations, usage, member workflows | Separate frontend; hosting not fixed in its proposal |
 | Provider admin/control plane | Provider identity, registry, audited lifecycle actions | Proposed; host/repository not selected |
 
+The admin-panel frontend is no longer documentation-only: the panel status
+records a React/Vite client app and an `/app/provider` scaffold. The provider
+scaffold currently shares the client build artifact as an interim state; the
+accepted panel architecture requires separate provider trust-mode deployment
+before live provider wiring. Neither client-panel nor provider-panel production
+hosting is recorded as selected or deployed.
+
+## 2.1 Admin-panel implementation and environment status
+
+The panel repository records A0-A3 accepted, A4 implemented/local-tested
+pending owner acceptance, and an A7 mock-backed provider UI scaffold. A2's
+authentication smoke test used a local Supabase schema-27 stack; A3/A4 and
+provider browser checks use mocked responses. The panel README requires a
+tenant-specific public configuration, Auth redirect allowlist, email/password
+Auth, and TOTP for local sign-in. These are not evidence of hosted-tenant
+compatibility or production configuration.
+
+The panel does not create tenant membership on signup. Until a membership
+invitation/management contract is implemented, a trusted workspace owner
+activates membership through Supabase tooling. Hosted Auth policy, SMTP,
+domains, secrets, and static hosting still need explicit release configuration.
+
 Production capacity, connection limits, provider quotas, and cost are finite.
 Use measured workload and provider limits; no unlimited scalability or SLA is
 implied.
@@ -57,7 +79,8 @@ a long-running container.
 - Deployments require health verification, error/latency monitoring, rollback
   instructions, and a reviewed change record.
 - Client and provider admin modes must not share browser-held privileged
-  authority; deploy them as separate trust modes.
+  authority; deploy them as separate trust modes. The current provider UI
+  scaffold shares the client artifact and is not the final deployment boundary.
 - Never infer production readiness from a successful build or a green test
   alone.
 
@@ -96,3 +119,9 @@ logs and support reports. Fail visibly on missing critical configuration.
 AWS provisioning, production deployment, hosted schema writes, real provider
 calls, and client-data access require the appropriate explicit owner approval.
 This documentation hub grants none of them.
+
+The admin-panel's accepted A7 design also requires provider activation to gate
+widget issuance/serving and client-issued grants for provider private-data
+access or updates. These controls are not implemented in the widget backend;
+its ADR 0019 remains proposed. Do not treat either the UI scaffold or an
+accepted panel design as deployment readiness.

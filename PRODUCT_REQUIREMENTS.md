@@ -8,7 +8,7 @@ requirements are not evidence that a feature is implemented or released.
 
 The visitor/widget requirements W-01 through W-16 originate in the
 `ragbot-widget` product baseline. The administration requirements ADM-01
-through ADM-20 originate in the `ragbot-admin-panel` proposal. Requirements
+through ADM-21 summarize the `ragbot-admin-panel` specification. Requirements
 marked proposed depend on owner decisions and backend contracts.
 
 ## 2. Product vision
@@ -35,8 +35,8 @@ identities are distinct trust domains.
 | Provider super-admin | Provider control plane | Manage provider staff and authorized client lifecycle actions |
 | FDE/operator | Operational systems | Provision, configure, monitor, evaluate, and support deployments under approved procedures |
 
-Provider roles are proposed and must not be represented as tenant memberships.
-The user interface is not an authorization boundary.
+Provider roles belong to a separate trust domain and must not be represented
+as tenant memberships. The user interface is not an authorization boundary.
 
 ## 4. Product boundaries
 
@@ -48,10 +48,12 @@ contracts, and tenant-admin backend operations.
 
 ### Administration repository
 
-`ragbot-admin-panel` specifies client and provider administration journeys.
-Client administration consumes approved tenant contracts. It does not own
-tenant migrations, the visitor API, indexing, or privileged credentials.
-Provider administration requires a separately designed provider service.
+`ragbot-admin-panel` contains the client-admin frontend and a mock-backed
+provider UI scaffold, and specifies their administration journeys. Client
+administration consumes approved tenant contracts. It does not own tenant
+migrations, the visitor API, indexing, or privileged credentials. Live
+provider administration requires the separately owned provider service,
+registry, and tenant contracts, which are not implemented.
 
 ### This documentation repository
 
@@ -137,16 +139,32 @@ comes from approved server configuration, not model output.
 | ADM-12 | Visible failures | Surface auth, MFA, permission, conflict, indexing, quota, and outage failures honestly |
 | ADM-13 | Provider authentication | Require provider identity, MFA, and provider-side roles |
 | ADM-14 | Client registry | Let provider roles inspect registered client/deployment metadata |
-| ADM-15 | Explicit client operations | Cross-client capabilities require a documented, authorized, audited server operation |
+| ADM-15 | Explicit client operations | Cross-client capabilities require a documented, authorized, audited server operation; private-data access and updates additionally require an active, unexpired client-issued grant scoped by area and purpose |
 | ADM-16 | Subscription lifecycle | Authorized provider actions update defined plan/status terms and produce an audit record |
 | ADM-17 | Suspension/restoration | Provider lifecycle state is enforced by an authoritative backend check, not only UI state |
 | ADM-18 | Provider audit | Record actor, target, action, time, outcome, and safe metadata for provider mutations |
 | ADM-19 | Trust-domain isolation | Client credentials cannot call provider operations; provider operations are scoped to a registered client |
 | ADM-20 | Provisioning | Do not claim automated provisioning until its infrastructure workflow is designed and approved |
+| ADM-21 | Provider activation gate | The accepted panel design requires provider activation before a widget script is issued/servable; tenants cannot self-activate or self-enable while inactive, and the authoritative server path enforces this state |
 
-ADM-08, ADM-09 lifecycle enforcement, ADM-11, and ADM-13 through ADM-20 depend
-on contracts or services that are not established by the current documentation
-baseline.
+ADM-08, ADM-09 lifecycle enforcement, ADM-11, and ADM-13 through ADM-21 depend
+on contracts or services that are not established by the current backend
+documentation. The panel repository records A7.0 and amendments as accepted,
+but the widget repository's ADR 0019 remains proposed; see
+[roadmap and status](ROADMAP_AND_STATUS.md) and
+[decisions and open questions](DECISIONS_AND_OPEN_QUESTIONS.md). Acceptance in
+one repository is not evidence that the cross-repository backend contract or
+enforcement exists.
+
+### Client sign-in and activation
+
+The accepted panel login design uses email/password sign-in, with optional
+self-registration and password reset/confirmation emails. Signup alone never
+grants access: a user needs an active tenant membership and required `aal2`
+TOTP assurance. Until an in-panel membership contract exists, the current
+documented activation path is a trusted workspace owner updating tenant
+membership through Supabase tooling. Tenant signup policy remains configurable;
+open registration is not required.
 
 ## 9. Knowledge-gap answer behavior
 
@@ -161,8 +179,10 @@ Frequent unanswered questions are a review queue, not a training mechanism:
 5. The answer becomes retrievable only after successful atomic activation.
 6. A failed replacement leaves previously active knowledge intact.
 
-Whether an approved answer is stored as a Markdown document or as a dedicated
-FAQ record remains undecided. This is not model retraining.
+The current panel implementation submits an admin-authored Markdown document
+through the ordinary document upload/indexing path. A dedicated FAQ/publish
+contract, durable linkage from a report row to an answer, and canonical
+citation/retention semantics remain undecided. This is not model retraining.
 
 ## 10. Product success criteria
 

@@ -66,7 +66,14 @@ Do not use a phase table or requirement row as proof of feature completion.
 
 ## 6. Snapshot metadata
 
-Update the date and source revision when refreshing the status snapshot in
-[README.md](README.md) and [ROADMAP_AND_STATUS.md](ROADMAP_AND_STATUS.md).
-The current initial snapshot is based on documentation reviewed on
-2026-11-20 and is not a live synchronization mechanism.
+Update the review date and exact source revisions when refreshing the status
+snapshot in [README.md](README.md) and [ROADMAP_AND_STATUS.md](ROADMAP_AND_STATUS.md).
+The 2026-11-21 snapshot compares `ragbot-admin-panel` at
+`885535cd086e923485c78a6330dc4e09332e6084` with `ragbot-widget` at
+`ebc75ecaf2c99ce6dcacdbefa3827914b64273b5`. It is not a live synchronization
+mechanism or an independent runtime audit.
+
+When source documents disagree, record the mismatch, identify which source
+owns the implementation contract, and avoid resolving it by inference. In
+particular, distinguish an accepted admin-panel design from a provider or
+tenant-backend capability that has not been specified and implemented there.

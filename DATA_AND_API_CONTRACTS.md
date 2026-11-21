@@ -93,20 +93,40 @@ knowledge-gap reporting. Verify exact names, parameters, and roles from the
 current backend schema before integration.
 
 The existing `knowledge_gaps` capability is a bounded aggregate report. It is
-not a completed answer-publishing workflow.
+not an answer-publishing API. The panel's A4 implementation submits an
+admin-authored `public_answer` Markdown document through the ordinary
+register/upload/complete document pipeline; indexing and activation remain
+authoritative. The panel records a gap association using a title plus a
+source-gap blockquote convention, not a durable backend relation. The report
+does not provide language, a raw conversation reference, or a pagination
+cursor; its range and row limits are bounded. These implementation details do
+not establish a dedicated answer contract, citation guarantee, or live
+provider behavior.
+
+The pinned panel review describes a 92-day maximum range and a 1–200 row
+limit. The backend omits the `blocked` group from the analyst aggregate, but
+analysts retain direct RLS reads to permitted message records; aggregate
+filtering is not a transcript-privacy boundary.
 
 ## 7. Contracts not yet established
 
 | Capability | Current documentation | Required design |
 |---|---|---|
 | Dedicated widget key | Existing embed uses public bot/config values | Issuance, hash/storage, lookup/bootstrap, rotation, revocation, optional host policy, cache invalidation |
-| Provider service | No provider API/registry is assumed | Identity/MFA/roles, ownership, tenant targeting, credential handling, operations, audit |
+| Provider service | The panel accepted a provider API/registry design, but neither is implemented | Identity/MFA/roles, ownership, tenant targeting, credential handling, operations, audit |
 | Subscription | Bot enablement exists; it is not a subscription lifecycle | Plan/status/period/limits/grace semantics, authoritative state, runtime checks, outage policy |
 | Suspension | No full provider suspension contract | Server-side enforcement for session/chat/index paths and restoration/audit semantics |
 | Approved answers | Knowledge-gap reporting exists | Markdown-vs-FAQ representation, author/approval, authorization, indexing status, audit, retention, citation |
 | Provider-to-tenant calls | No delegation model is selected | Narrow operation set, least privilege, target verification, audit, no browser-held privileged key |
+| Client-held grants | No grant table or API is established by the current backend contract | Tenant-owned scope, purpose, expiry, issue/revoke operations, and live provider-API enforcement with audit on both sides |
+| Provider activation gate | No provider activation or script-issuance contract is established | Authoritative provider-active state, no tenant self-activation, widget issuance/serving gate, and runtime enforcement |
 
 Do not build UI controls that imply these contracts already exist.
+
+The admin-panel ADR 0003 records the activation and grant designs as accepted
+amendments, while `ragbot-widget` ADR 0019 remains proposed. This status
+difference is unresolved; neither design is evidence of a shipped schema,
+RPC, provider API, or runtime check.
 
 ## 8. Compatibility and change process
 

@@ -45,9 +45,13 @@ Principles:
        -> explicit, scoped tenant operation when permitted
 ```
 
-The provider control API, registry, and identity are proposed components. They
-are not assumed to exist. The provider browser must never connect to arbitrary
-tenant projects using service-role credentials.
+The provider control API, registry, and identity are not implemented. The
+admin-panel repository records an accepted design for a dedicated provider
+identity domain, provider activation gating, and client-issued grants. The
+widget repository's ADR 0019 still labels managed administration proposed;
+until that source contract is aligned, these remain design-level only. The
+provider browser must never connect to arbitrary tenant projects using
+service-role credentials.
 
 ## 3. Documented runtime deployment baseline
 
@@ -120,8 +124,21 @@ ordinary admin write path. Provider credentials are absent from this browser.
 
 The provider API authenticates provider identity and MFA, authorizes the
 specific action and client target, performs a narrowly scoped server-side
-operation, and records an audit event. Any access to private client content
-requires a separate purpose-specific policy and explicit authorization.
+operation, and records an audit event. The accepted panel design adds two
+gates that require backend implementation:
+
+- A tenant cannot self-activate or self-enable while inactive. Widget script
+  issuance/serving must be gated on provider activation, with runtime
+  enforcement on the authoritative server path.
+- Private-data access and updates require a client-issued grant containing
+  scope, purpose, and expiry. Clients can inspect and revoke grants; the
+  provider API checks the live grant on every gated operation. Grant-related
+  actions are audited on both sides.
+
+No grant table/API or provider service is established by the current widget
+contract. Any access to private client content remains denied until the
+cross-repository contract, migration, API enforcement, and audit behavior are
+implemented and verified.
 
 ## 6. Trust boundaries
 

@@ -22,6 +22,11 @@ an untrusted host page and is not a secret-bearing security boundary.
 
 - Require a valid tenant Supabase Auth session, active membership, allowed
   role, and required `aal2` assurance.
+- The accepted panel login design uses email/password. Self-registration,
+  where enabled by tenant Auth policy, creates no membership; confirmation
+  and password-reset links are not sign-in links. Membership activation
+  remains an operator-managed tenant action until an approved in-panel
+  membership contract exists.
 - Enforce authorization in PostgreSQL RLS, approved RPCs, and Storage policies,
   not only in the panel.
 - Service-role access bypasses RLS; privileged routes must perform explicit
@@ -29,7 +34,7 @@ an untrusted host page and is not a secret-bearing security boundary.
 - Client admin browsers receive no service-role, provider, AI-provider, or
   visitor-signing secrets.
 
-### Provider staff (proposed)
+### Provider staff (accepted panel design; backend not implemented)
 
 - Provider identity, MFA, role, target-client scope, and action permission are
   checked by a provider service on every request.
@@ -39,6 +44,19 @@ an untrusted host page and is not a secret-bearing security boundary.
 - Every cross-client lifecycle operation is scoped and audited.
 - Access to private transcripts or document bodies requires a separate
   purpose, permission, and audit policy.
+- The accepted panel design further requires a tenant-issued grant for
+  provider access to private data or updates. A grant carries scope, purpose,
+  and expiry, is visible and revocable by the client, and must be checked live
+  by the provider API on every gated operation. Grant changes and gated
+  operations require audit on both sides.
+- Provider activation must gate widget issuance/serving and tenant
+  self-enable. This must be enforced by an authoritative server path, not by
+  hidden UI.
+
+The grant and activation requirements are accepted in admin-panel ADR 0003
+amendments, but are not implemented in the widget backend. Widget ADR 0019
+still marks the managed-admin boundary proposed. Do not treat the panel
+decision as a production authorization control.
 
 ## 3. Data and content safeguards
 
@@ -102,7 +120,8 @@ Test direct backend/RPC/Storage access, not only UI behavior:
 - Rate/budget races, duplicate delivery, idempotency conflict, and lease
   takeover behavior.
 - Provider-client credential separation, target restriction, provider MFA,
-  and audit evidence once provider infrastructure exists.
+  grant enforcement/audit, activation gating, and audit evidence once provider
+  infrastructure exists.
 - Secret scanning and browser-bundle inspection.
 
 This checklist is a design baseline, not a completed security certification.

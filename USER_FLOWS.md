@@ -20,12 +20,17 @@ implemented contact service confirms that outcome.
 
 ## 2. Client admin signs in
 
-1. User signs in through the tenant's configured Supabase Auth project.
-2. The panel checks the active tenant membership and required `aal2`
-   assurance.
-3. Backend RLS and every privileged RPC/Storage policy re-check the relevant
-   identity, membership, role, and MFA conditions.
-4. On expiry, revocation, or lost assurance, the panel clears sensitive
+1. User signs in with email and password through the tenant's Supabase Auth
+   project. Confirmation and password-reset links are account lifecycle
+   callbacks, not magic-link sign-in.
+2. The user may self-register only if tenant Auth policy permits it; signup
+   does not activate membership or grant access.
+3. A trusted workspace owner activates membership through the current
+   operator-managed Supabase process until an in-panel member contract exists.
+4. The panel checks active tenant membership and required `aal2` TOTP
+   assurance. Backend RLS and every privileged RPC/Storage policy re-check
+   identity, membership, role, and assurance.
+5. On expiry, revocation, or lost assurance, the panel clears sensitive
    in-memory state and presents an explicit re-authentication/denial state.
 
 UI route guards are presentation only.
@@ -54,18 +59,24 @@ UI route guards are presentation only.
 5. The panel reports success only after backend confirmation; stale edits are
    surfaced as conflicts rather than silently overwritten.
 
-## 5. Client admin reviews a knowledge gap (proposed end-to-end feature)
+## 5. Client admin reviews a knowledge gap (panel implementation; backend contract incomplete)
 
-1. The panel displays an authorized, bounded aggregate of frequent unanswered
-   questions.
+1. The panel displays the backend's bounded aggregate of frequent unanswered
+   questions. The current report does not include language or a raw
+   conversation reference; its analyst filtering does not itself enforce
+   transcript privacy.
 2. The admin reviews permitted context without unrestricted transcript access.
-3. The admin authors or approves a response or updates an existing source.
-4. The content is submitted through the approved tenant knowledge lifecycle.
-5. The worker reports indexing state.
-6. Retrieval can use the content only after successful atomic activation.
+3. The admin authors and explicitly approves a Markdown response.
+4. The current panel implementation registers, uploads, and completes an
+   ordinary `public_answer` document; the worker reports indexing state.
+5. Retrieval can use the content only after successful atomic activation.
+6. The panel associates the document with the gap using a title and
+   source-gap blockquote convention. This is not a durable backend link or
+   guaranteed citation relationship.
 
-No visitor question or model response is automatically published. Whether the
-content is a Markdown document or FAQ entity remains open.
+No visitor question or model response is automatically published. The panel
+currently uses Markdown documents; the backend's canonical answer entity,
+durable gap linkage, and citation contract remain open.
 
 ## 6. Client admin installs the widget
 
@@ -85,20 +96,35 @@ Current subscription lifecycle and enforcement are not established.
 
 ## 8. Provider staff manages a client (proposed)
 
-1. Staff authenticates to the provider trust domain and completes provider
-   MFA.
+1. Staff authenticates to the separate provider trust domain and completes
+   provider MFA.
 2. The provider API verifies staff role, requested operation, and target client
    against a provider-owned registry.
-3. The API performs only the specifically authorized operation.
-4. The API records actor, target, action, outcome, timestamp, and safe
-   metadata.
+3. For private-data access or updates, the client first issues a grant from its
+   own panel with explicit scope, purpose, and expiry. The client can inspect
+   and revoke it; the API checks the live grant for every gated operation.
+4. The API performs only the authorized operation and records the action in
+   provider audit; grant issue/revoke and gated actions also produce the
+   required tenant-side audit.
 5. The UI displays the authoritative result and audit correlation.
 
 The browser cannot supply arbitrary project references, credentials, or
-deployment URLs. Suspension/restoration must affect server-side runtime
-authorization; hiding a UI element is insufficient.
+deployment URLs. A tenant cannot self-activate or self-enable while inactive;
+widget script issuance/serving must wait for provider activation, enforced by
+the authoritative server. Suspension/restoration must affect server-side
+runtime authorization; hiding a UI element is insufficient. These activation
+and grant flows are accepted in panel design but not implemented in the
+backend.
 
-## 9. Shared interface states
+## 9. Provider activation and client-held grant (design only)
+
+The provider activation gate and client-issued grant flow above are accepted
+in the admin-panel ADR 0003 amendments. The widget integration ADR 0019 remains
+proposed, and no provider API, tenant grant migration, or runtime activation
+check is established. Do not treat this flow as operational until the two
+source repositories publish a compatible contract and the checks pass.
+
+## 10. Shared interface states
 
 Every admin data screen must distinguish loading, empty, ready, denied,
 session-expired/MFA-required, validation error, stale conflict, quota/rate
