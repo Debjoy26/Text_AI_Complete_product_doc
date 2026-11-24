@@ -2,13 +2,15 @@
 
 ## 1. Status snapshot
 
-Source documentation status as of 2026-11-21:
+Source documentation status as of 2026-11-21, updated 2026-11-24 for P11:
 
 - Backend phases P0-P10 are recorded as owner-accepted.
 - T25-d real database race checks and T26 single-command unit/integration
-  gates remain open carries. P11 evaluation/security/load work has not
-  started.
+  gates remain open carries. P11 started 2026-11-24: live eval 23/24,
+  citation fix, security checklist executed; load p95, fallback eval, and
+  throwaway restore rehearsal remain carried.
 - The backend status records local and hosted migration histories at 027.
+  Default chat model is now `gemini-3.5-flash-lite` (backend ADR 0020).
 - The admin panel records A0–A4 as owner-accepted and implemented, including
   password login (ADR 0004). Its provider screens are scaffolded; no
   provider API, provider registry, or admin deployment is claimed.
@@ -16,7 +18,8 @@ Source documentation status as of 2026-11-21:
   remain proposed/open (design accepted panel-side in ADR 0003; the widget
   repo's ADR 0019 remains Proposed). Admin-approved knowledge publishing
   (A4) is implemented and owner-accepted.
-- Render remains the API/worker baseline. AWS Docker hosting is undecided.
+- Render remains the API/worker baseline. The AWS alternative is recorded as
+  Proposed (backend ADR 0021); adoption needs its gates.
 
 This snapshot is copied from source documentation, not freshly revalidated.
 Use the source repos for any later state.
@@ -38,7 +41,7 @@ Use the source repos for any later state.
 | P8 | Browser widget | Accepted |
 | P9 | Analysis, entries, retention | Accepted |
 | P10 | Operations and deployment hardening | Accepted |
-| P11 | Evaluation, security review, load/restore gates | Not started |
+| P11 | Evaluation, security review, load/restore gates | Started 2026-11-24 (eval + security done; load/restore/fallback carried) |
 | P12 | First client deployment | Not started |
 
 P11 remains behind explicit owner authorization and its defined prerequisites.

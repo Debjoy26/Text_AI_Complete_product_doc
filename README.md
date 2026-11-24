@@ -68,11 +68,16 @@ this hub as authoritative for an implementation-level contract.
 
 ## Status snapshot
 
-As recorded in the source documentation on 2026-11-21:
+As recorded in the source documentation on 2026-11-21, updated 2026-11-24
+for backend P11 progress (see the linked repos for the authoritative state):
 
 - The backend records P0-P10 as owner-accepted. T25-d and T26 single-command
-  verification carries remain open; P11 has not started.
+  verification carries remain open. P11 started 2026-11-24: live Gemini eval
+  23/24, citation-marker fix, security checklist executed; load p95, fallback
+  eval, and throwaway restore rehearsal remain carried.
 - The backend status records local and hosted migration histories at 027.
+  Default chat model moved to `gemini-3.5-flash-lite` (2.5 retired for new
+  keys; paid-tier $0.30/$2.50 per 1M — see backend ADR 0020).
 - The admin panel records A0–A4 as owner-accepted and implemented (client
   login is email plus password with mandatory TOTP; see
   [ADR 0004](https://github.com/Debjoy26/ragbot-admin-panel/blob/main/docs/decisions/0004-password-login.md)).
@@ -81,9 +86,12 @@ As recorded in the source documentation on 2026-11-21:
   its screens are scaffolded and the provider backend (API, registry, staff
   identity) is not started. The API home is decided: isolated server piece
   of `ragbot-widget`; that repo's ADR 0019 remains Proposed pending owner
-  acceptance.
-- Render remains the documented API/worker baseline. AWS Docker hosting is an
-  open architecture decision; the widget is a static browser bundle.
+  acceptance. A signup-policy conflict (panel self-registration vs backend
+  signup-off) is recorded for owner decision.
+- Render remains the documented API/worker baseline. The AWS alternative
+  (ECS/Fargate + S3/CloudFront) is recorded as Proposed in backend
+  [ADR 0021](https://github.com/Debjoy26/ragbot-widget/blob/main/docs/decisions/0021-aws-deployment-baseline.md);
+  the widget is a static browser bundle.
 
 These are source-document status notes, not a fresh audit or verification by
 this documentation repository. Check the linked repositories for changes

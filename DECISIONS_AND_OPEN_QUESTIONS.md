@@ -24,9 +24,12 @@ have been implemented.
 
 ## 2. Current deployment and product choices
 
-- The documented API/worker baseline is Render.
+- The documented API/worker baseline is Render. The AWS alternative is
+  recorded as Proposed in backend ADR 0021 (2026-11-24).
 - The widget is a static JavaScript bundle; the backend docs currently
-  describe Vercel static delivery.
+  describe Vercel static delivery. Note 2026-11-24: Vercel Hobby is
+  non-commercial, so client-facing delivery needs Pro or static hosting
+  (e.g. S3 + CloudFront, as per ADR 0021).
 - The backend records a per-client Supabase project and deployment model.
 - `bot_profiles.enabled` is a bot enablement switch, not a full subscription
   lifecycle.
@@ -66,8 +69,8 @@ Still requiring owner decisions:
 | Subscription | Plans, status states, start/end semantics, quotas, grace period, manual actions, billing scope, and audit |
 | Runtime enforcement | Which operations check status, authoritative source, caching/invalidation, and failure policy |
 | Widget identifier | Key/slug format, storage/hashing, bootstrap lookup, host restrictions, rotation, revocation, and unknown-key response |
-| Client membership | In-panel invitation flow, role changes, and removal (activation itself is settled) |
-| AWS | Whether to leave Render; EC2 versus ECS/Fargate; isolation; tenant DB location; secrets/monitoring; widget CDN |
+| Client membership | In-panel invitation flow, role changes, and removal (activation itself is settled). Opened 2026-11-24: signup policy conflicts — panel ADR 0004 allows self-registration (inert until activation) while the backend P12 runbook prescribes signup off plus `make first-admin` |
+| AWS | Whether to adopt backend ADR 0021 (ECS/Fargate + S3/CloudFront); isolation; tenant DB location; secrets/monitoring; widget CDN |
 | Operations | Data jurisdiction, privacy notice, retention, backup/restore, RPO/RTO, support access, and launch targets |
 | Commercial model | Per-client service limits, usage caps, provider costs, service tiers, and any future payment integration |
 
